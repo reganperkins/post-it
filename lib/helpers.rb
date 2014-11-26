@@ -20,7 +20,7 @@ helpers do
     end
 
     # appending to history
-    arr <<  str unless arr.include?(str)
+    arr <<  str unless arr.include?(str) #rename str
 
     # save only most recent history
     arr = arr.last(3) if arr.size > 3
@@ -40,7 +40,6 @@ helpers do
     output_str
   end
 end
-
 
 
 # @temp = cookies[:board_history] #arr of str

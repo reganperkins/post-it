@@ -49,6 +49,13 @@ function addNote(id,content,x,y,width,height) {  //addNote to the view
 
 }
 
+// combine note function calls
+// function createNotes(){
+//   addNote();
+//   addNoteToDB();
+
+// }
+
 
 function addNoteToDB(content,x,y,width,height) {  //addNote to the view
     var postData = {

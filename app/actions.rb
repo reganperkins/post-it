@@ -7,7 +7,7 @@ get '/' do
   rescue
     @board_history = []
   end
-  erb :landing_page  
+  redirect "/#{generate_rand_str}"
 end
 
 get '/goto/random/page' do

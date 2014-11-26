@@ -1,12 +1,3 @@
-/* Default Link Styles */
-a {
-  color: #0FAD41;
-  text-decoration: none;
-  line-height: inherit; }
-  a:hover, a:focus {
-    color: #0C8633; }
-  a img {
-    border: none; }
 
 button, .button {
   border-style: solid;
@@ -27,20 +18,9 @@ button, .button {
   padding-bottom: 1.0625rem;
   padding-left: 2rem;
   font-size: 1rem;
-  background-color: #0FAD41;
-  border-color: #007095;
   color: white;
-  transition: background-color 300ms ease-out; }
-  button:hover, button:focus, .button:hover, .button:focus {
-    background-color: #0C8633; }
-  button:hover, button:focus, .button:hover, .button:focus {
-    color: white; }
-
-.draggable {
-  
+  transition: background-color 300ms ease-out; 
 }
-
-
 
 /*----- SIDE BAR -----*/
 
@@ -53,7 +33,7 @@ button, .button {
   height: 100%;
   background-image: url('../../images/noisy_net.png');
   float: left;
-  z-index: 100000;
+/*  z-index: 100000;*/
 }
 
 .nav-bar ul {
@@ -80,6 +60,8 @@ button, .button {
   background: none;
   border: none;
   font-size: 1.1em;
+  outline: 0;
+
 /*  min-width: 100px;
   min-height: 100px;*/
 }
@@ -104,9 +86,9 @@ button, .button {
   float: left;
   height: 100%;
   background-color: #363b41;
-  opacity:0.9;
+  /*opacity:0.9;*/
   padding-left: 0;
-  z-index: 500;
+  z-index: 100;
 }
 
 .sub-menu h1 {
@@ -146,7 +128,7 @@ button, .button {
   padding-top: 10px;
   padding-bottom: 10px;
   text-align: center;
-  /*border: 1px solid #3b4148;*/
+  border: 1px solid #3b4148;
 }
 
 .sub-menu li:hover {

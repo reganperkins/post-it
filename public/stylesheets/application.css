@@ -1,15 +1,39 @@
+
+button, .button {
+  border-style: solid;
+  border-width: 0px;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-weight: normal;
+  line-height: normal;
+  margin: 0 0 1.25rem;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  display: inline-block;
+  padding-top: 1rem;
+  padding-right: 2rem;
+  padding-bottom: 1.0625rem;
+  padding-left: 2rem;
+  font-size: 1rem;
+  color: white;
+  transition: background-color 300ms ease-out; 
+}
+
 /*----- SIDE BAR -----*/
 
 .nav-bar {
   position: fixed;
   top: 0;
   left: 0;
-  color: #fff;
+  color: #E0DCDC;
   width: 70px; 
   height: 100%;
   background-image: url('../../images/noisy_net.png');
   float: left;
-  z-index: 100000;
+/*  z-index: 100000;*/
 }
 
 .nav-bar ul {
@@ -28,6 +52,30 @@
   color: #fff;
 }
 
+.post textarea {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 1.1em;
+  outline: 0;
+
+/*  min-width: 100px;
+  min-height: 100px;*/
+}
+
+.post {
+  padding: 20px;
+}
+
+.post img {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
 .sub-menu {
   position: fixed;
   font-family: 'Raleway', sans-serif;
@@ -38,7 +86,9 @@
   float: left;
   height: 100%;
   background-color: #363b41;
+  /*opacity:0.9;*/
   padding-left: 0;
+  z-index: 100;
 }
 
 .sub-menu h1 {

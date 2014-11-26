@@ -1419,7 +1419,7 @@ textarea {
   border-style: solid;
   border-width: 1px;
   border-color: #cccccc;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  /*box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);*/
   color: rgba(0, 0, 0, 0.75);
   display: block;
   font-size: 0.875rem;
@@ -3631,7 +3631,7 @@ td {
 
 /* Default Link Styles */
 a {
-  color: #008cba;
+  color: #black;
   text-decoration: none;
   line-height: inherit; }
   a:hover, a:focus {

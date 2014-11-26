@@ -1,53 +1,94 @@
-// Setting some defaults for posts
-// var postX;
-// var postY;
-// var postHeight;
-// var postWidth;
 
+var newNote; //global, i need this in addNoteToDB()
+
+
+function resizeParent() {
+  $(this).parent.height()
+}
 
 //Adds new note to page when add tab is clicked
-function addNote(content,x,y,width,height){
+function addNote(id,content,x,y,width,height) {  //addNote to the view
   // setting default values
-  if(typeof(content)==='undefined') content = "lorem ipsum";
-  if(typeof(x)==='undefined') x = "50px";  //not used 
-  if(typeof(y)==='undefined') y = "50px";  //not used
 
+  if(typeof(content)==='undefined') content = "";
+  if(typeof(x)==='undefined') x = "150px"; 
+  if(typeof(y)==='undefined') y = "50px";
   if(typeof(width)==='undefined') width = "220px";  
   if(typeof(height)==='undefined') height = "120px";
 
 
-  // var $newNote = $('<div class="resize draggable post" style="width: 200px; height: 200px;"></div>');
-  // var $newNote = $('<div class="resize draggable drag-drop" style="width: 300px; height: 300px; margin-left: 310px;"><textarea rows="8" cols="50"></textarea></div>');
-  // $newNote.appendTo('.resize-container');
+  // var newNote = $('<div class="resize draggable post" style="width: 200px; height: 200px;"></div>');
+  // var newNote = $('<div class="resize draggable drag-drop" style="width: 300px; height: 300px; margin-left: 310px;"><textarea rows="8" cols="50"></textarea></div>');
+  // newNote.appendTo('.resize-container');
 
+  // var $newNote = $('<div contenteditable class="draggable resize post fa fa-times" >' + content + '</div>');
+  newNote = $('<div class="draggable resize post" >' + 
+    '<a href="javascript: ;" class="delete" ><img src="../../images/exit.png" ></a>' +
+    '<textarea >' + content + '</textarea></div>');
+  newNote[0].setAttribute('postId', id);
 
-// var $newNote = $('<div contenteditable class="draggable resize post fa fa-times" >' + content + '</div>');
-  var $newNote = $('<textarea class="draggable resize post" >' + content + '</textarea>');
-  $newNote.css({
-    // 'background-image': 'linear-gradient( #FDF98C, #fdee72)',
-    // 'background-image': 'url("../../images/add.png")',
+  newNote.css({
     'background': 'linear-gradient( #FDF98C, #fdee72)',
     'width': width,
     'overflow': 'auto',
     'height': height,
-    'margin-left': '310px',
-    'padding': '20px',
     'left': x,
     'top': y
   });
 
-  $newNote.appendTo('.resize-container');
-  $('.post').elastic();
 
-};
+  newNote.appendTo('.resize-container');
+  // $('textarea', newNote).autosize({
+  //   callback: resizeParent
+  // });
+
+  // $('textarea', newNote).on('change', function() {
+  //   console.log('working!');
+  // });
+  // $('.post textarea').elastic();
+
+}
+
+// combine note function calls
+// function createNotes(){
+//   addNote();
+//   addNoteToDB();
+
+// }
+
+
+function addNoteToDB(content,x,y,width,height) {  //addNote to the view
+    var postData = {
+      content: newNote.text(),
+      x: newNote.offset()["left"] + "px",
+      y: newNote.offset()["top"] + "px",
+      width: newNote.css("width"),
+      height: newNote.css("height")
+    };
+
+    $.ajax({
+      url: window.location.pathname + "/post/create",
+      type: 'POST',
+      data: postData,
+      success: function(id) {
+        newNote[0].setAttribute('postId', id);
+
+      }
+    }); 
+}
+
+function exit(){
+  $(this).parent().remove();
+}
 
  /* BLIND STICKER RE-GENERATION */
 
-function addSticker(){
-  $(this).clone().prependTo($(this));
-  // var $newSticker = $('<img src="../../images/all-the-things.png">');
-  // $newSticker.appendTo($(this));
-};
+// function addSticker(){
+//   // $(this).clone().prependTo($(this));
+
+//   var $newSticker = $('<img src="../../images/all-the-things.png">');
+//   $newSticker.appendTo($('.first'));
+// };
 
 // function addSticker(){
 //   var $newSticker = $('<img src="../../images/all-the-things.png">');
@@ -55,32 +96,60 @@ function addSticker(){
 // };
 
 
+function updatePost($el) {
+
+  var $parent = $el.parent('div');
+  var postData = {
+    id: $parent.attr("postid"),
+    content: $el.val(), //assuming $el refers to a textarea
+    x: $parent.offset().left + "px", //$el.css("left") doesnt work, css is too raw, not updated
+    y: $parent.offset().top + "px",
+    width: $parent.css("width"),
+    height: $parent.css("height")
+  };
+
+  $.ajax({
+    url: window.location.pathname + "/post/update",
+    type: 'POST',
+    data: postData
+  });
+}
+
 
 function bindPostListeners() {
-  $(".post").on('blur', function(e) {
+  $(".post")
+    .on('click', function(e) {
+      $(this).find("textarea").focus();
+    });
+  $(".post textarea").on('focus', function(e) { 
+      // console.log(".post focused");
+      window.$latest_post = $(this); //global
+    })
+    // .on('click',function(e) { console.log(".post clicked "); })
+    .on('blur', function(e) {
+      updatePost($(this));
+    });
+
+  // $("div.draggable.resize.post")
+  //   .on('focus', function(e) {
+  //     window.$latest_focused_div = $(this); // for resize hack
+  //     console.log("latest_focused_div focused");
+  //   });
+  
+
+  $(".delete").on('click', function(e) {
+    var $parent = $(this).parent('div');
     var postData = {
-      content: $(this).text(),
-      x: $(this).attr("left") + "px",
-      y: $(this).attr("top") + "px",
-      width: $(this).css("width"),
-      height: $(this).css("height")
+      id: $parent.attr("postid")
     };
-
-
-      console.log("UPDATE not implemented");
-      // console.log(this);
-      // console.log(data);
-
+// debugger;
     $.ajax({
-      url: window.location.pathname + "/post/update",
+      url: window.location.pathname + "/post/delete",
       type: 'POST',
       data: postData
     });
   });
 } //end function
-
-
-
 
   /* Post It Moveability */
 function postLoadAll(){
@@ -94,15 +163,32 @@ $.ajax({
 
       for (var i = 0; i < obj.length; i++) {
         // console.log(obj[i]);
-        addNote(obj[i]["content"],obj[i]["x"],obj[i]["y"],obj[i]["width"],obj[i]["height"]);
+        addNote(obj[i]["id"],obj[i]["content"],obj[i]["x"],obj[i]["y"],obj[i]["width"],obj[i]["height"]);
       }
 
       bindPostListeners();
     });
 }
 
+  function sleep(ms) {
+    var unixtime_ms = new Date().getTime();
+    while(new Date().getTime() < unixtime_ms + ms) {}
+}
+
+  window.onbeforeunload = function() {
+    updatePost(window.$latest_post);
+
+    sleep(500);
+    // return "YOur about to leave this page";
+  };
 
 $(document).ready(function() {
+
+
+  $('.resize-container').on('click', '.delete', function() {
+    $(this).parent().remove();
+    // todo - send delete api request
+  });
 
     interact('.resize')
 
@@ -114,7 +200,6 @@ $(document).ready(function() {
       var
         newWidth  = parseFloat(target.style.width ) + event.dx,
         newHeight = parseFloat(target.style.height) + event.dy;
-
       // update the element's style
       target.style.width  = newWidth + 'px';
       target.style.height = newHeight + 'px';
@@ -124,11 +209,21 @@ $(document).ready(function() {
       postHight = newHeight + 'px';
 
       // target.textContent = newWidth + '×' + newHeight;
+    })
+// debugger;
+    .on('resizeend', function (event) {
+
+      // updatePost($(this).find("> textarea") );
+      // console.log($(this).height());
+      // updatePost(window.$latest_focused_div.find("> textarea"));
+      console.log("Resize ended start!");
+      console.log("Resize ended!");
     });
 
     // target elements with the "draggable" class
-interact('.draggable')
+interact('.draggable').ignoreFrom('textarea')
     .draggable({
+
         // allow dragging of multple elements at the same time
         max: Infinity,
 
@@ -158,6 +253,8 @@ interact('.draggable')
                 'moved a distance of '
                 + (Math.sqrt(event.dx * event.dx +
                              event.dy * event.dy)|0) + 'px');
+
+
         }
     })
     // enable inertial throwing
@@ -192,46 +289,18 @@ interact('.draggable')
     $(this).closest('.sub-menu').hide();
   });
 
+  $('#option-boards').bind('click', function (event) {
+    
+    //clear the existing HTML
+    //parse the JSON cookie 
+    //for each entry in the cookie, create a DOM element and attach to the
+    //html list
+  });
 
-
-  // $(".post").on('blur', function() {
-  //     var post = {
-  //       content: $(this).text(),
-  //       x: postX,
-  //       y: postY,
-  //       width: postHeight,
-  //       height: postWidth
-  //     }
-
-  //     $.post('/post/'+id+'/update', {body: post}, function(data) {
-  //       if (data.result) {
-  //         post.css('z-index', 10);
-  //       }
-  //     }, 'json');
-
-  //   });
-
-  //   $.ajax({
-  //     url: '/user/create',
-  //     type: 'post',
-  //     dataType: 'json',
-  //     success: function (data) {
-  //       $('#target').html(data.msg);
-  //     },
-  //     data: {
-  //       content: "",
-  //       x: postX,
-  //       y: postY,
-  //       width: postHeight,
-  //       height: postWidth
-  //     }
-
-  //   });
 
 
   // Load all posts from db, stickers not supported
   postLoadAll();
-
 
 
 
